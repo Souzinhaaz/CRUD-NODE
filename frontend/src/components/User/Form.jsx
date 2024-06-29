@@ -1,6 +1,6 @@
 import React from "react";
 
-const UserForm = ({ formData, handleChange, handleSubmit, isEditing, handleCancelEdit, formatDate }) => {
+const Form = ({ formData, handleChange, handleSubmit, isEditing, handleCancelEdit, formatDate }) => {
   return (
     <form className="mb-4" onSubmit={handleSubmit} method="POST">
       <div className="mb-2">
@@ -59,4 +59,4 @@ const UserForm = ({ formData, handleChange, handleSubmit, isEditing, handleCance
   );
 };
 
-export default UserForm;
+export default Form;

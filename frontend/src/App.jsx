@@ -9,9 +9,12 @@ import { useState, useEffect } from "react";
 
 import Form from "./components/User/Form";
 import Table from "./components/User/Table";
+import Message from "./components/Layout/Message";
 
 const App = () => {
   const [users, setUsers] = useState([]);
+  const [message, setMessage] = useState();
+  const [type, setType] = useState();
   const [editingUserId, setEditingUserId] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -27,9 +30,9 @@ const App = () => {
         setUsers(data);
       })
       .catch((error) => {
-        console.log("Occurred some error: " + error);
+        console.log(error.response.data.message);
       });
-  }, []);
+  }, [users]);
 
   const [darkMode, setDarkMode] = useState(true);
 
@@ -56,6 +59,7 @@ const App = () => {
       ...formData,
       birthDate: formatDate(formData.birthDate),
     };
+    
 
     if (editingUserId) {
       updateUser(editingUserId, formattedData)
@@ -72,6 +76,8 @@ const App = () => {
             telephone: "",
             birthDate: "",
           });
+          setMessage("Usuário editado com sucesso");
+          setType("success");
           setEditingUserId(null);
         })
         .catch((error) => {
@@ -87,6 +93,8 @@ const App = () => {
             telephone: "",
             birthDate: "",
           });
+          setMessage("Usuário criado com sucesso");
+          setType("success")
         })
         .catch((error) => {
           console.log("Occurred some error: " + error);
@@ -111,7 +119,8 @@ const App = () => {
     deleteUser(user._id)
     .then(() => {
       setUsers(users.filter(user => user._id !== userId));
-      console.log("Usuário removido com sucesso");
+      setMessage("Usuário deletado com sucesso");
+      setType("error")
     })
     .catch((error) => {
       console.log("Occurred some error: " + error);
@@ -129,14 +138,20 @@ const App = () => {
   };
 
   const formatDate = (date) => {
-    if (!date) return "";
-    const formattedDate = new Date(date).toISOString().split("T")[0];
-    return formattedDate;
+    try {
+      if (!date) return "";
+      const formattedDate = new Date(date).toISOString().split("T")[0];
+      return formattedDate;
+    } catch(err) {
+      setMessage("Insira uma data válida")
+      setType("error")
+    }
   };
 
   return (
     <div className={`${darkMode ? "dark" : ""} min-h-screen flex flex-col`}>
       <div className="p-10 flex-1 dark:bg-gray-900 dark:text-white">
+        {message && <Message type={type} msg={message} />}
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Usuários</h1>
           <button

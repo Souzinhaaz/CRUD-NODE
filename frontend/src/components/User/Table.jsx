@@ -1,6 +1,6 @@
 import React from "react";
 
-const UserTable = ({ users, handleEdit, handleDelete }) => {
+const Table = ({ users, handleEdit, handleDelete }) => {
   return (
     <div className="overflow-x-auto overflow-y-auto">
   <table className="min-w-full bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-600">
@@ -14,7 +14,7 @@ const UserTable = ({ users, handleEdit, handleDelete }) => {
       </tr>
     </thead>
     <tbody>
-      {users.map((user, index) => (
+      {users && users.map((user, index) => (
         <tr key={index} className="text-sm md:text-base">
           <td className="py-2 px-4 border-b dark:border-gray-600 text-left">{index + 1}</td>
           <td className="py-2 px-4 border-b dark:border-gray-600 text-left">{user.name}</td>
@@ -26,10 +26,15 @@ const UserTable = ({ users, handleEdit, handleDelete }) => {
           </td>
         </tr>
       ))}
+      {!users || users == "" && (
+        <tr>
+          <td className="p-5 text-2xl">Nenhum usuário encontrado</td>
+        </tr>
+      )}
     </tbody>
   </table>
 </div>
   );
 };
 
-export default UserTable;
+export default Table;
